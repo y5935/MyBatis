@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+
+ <mapper namespace="cn.hl.vo.person2.mapper">
+	<!-- 
+		方式一：
+			select * from Person a
+				inner join Account b on a.personId=b.personId
+				where a.personId=1			
+	-->
+	<select id="oneToMore1" parameterType="int" resultMap="person2Map1">
+		select * from Person a
+				inner join Account b on a.personId=b.personId
+				where a.personId=#{id}
+	</select>
+	
+	<resultMap type="Person2" id="person2Map1">
+		<id column="personId" property="personId"/>
+		<result column="personName" property="personName"/>
+		<!-- 
+			collection	：表示集合
+				property	：主类对象中的属性名
+				ofType		：引用的副类类型
+		-->
+		<collection property="cards" ofType="Account">
+			<id property="cardNo" column="cardNo"/>
+			<result property="personId" column="personId"/>
+			<result property="blance" column="blance"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 
+		方式二：
+			select * from person where personId=1
+			select * from Account where personId=1			
+	-->
+	<select id="oneToMore2" parameterType="int"  resultMap="person2Map2">
+		select * from person where personId=#{id}
+	</select>
+	<select id="getAccount" parameterType="int" resultType="Account">
+		select * from Account where personId=#{id}
+	</select>
+	
+	<resultMap type="Person2" id="person2Map2">
+		<id column="personId" property="personId"/>
+		<result column="personName" property="personName"/>
+		<!--
+			property	：主类中的属性名
+			column		：数据表中的列名
+			select		：被引用的映射的名称
+		-->
+		<collection property="cards" column="personId" select="getAccount"></collection>
+	</resultMap>
+ </mapper>
+  

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.hl.vo.City">
+	<insert id="add" parameterType="City">
+		insert into city values(default, #{cityName},#{pId})
+	</insert>
+	
+	<select id="getById" resultType="City">
+		select * from city where cityId=#{cityId}
+	</select>
+</mapper>

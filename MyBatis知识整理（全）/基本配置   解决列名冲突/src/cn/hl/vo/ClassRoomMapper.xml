@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	namespace	：命名空间，一般使用vo类的全名（报名+类名）
+-->  
+<mapper namespace="cn.hl.vo.ClassRoom">
+	<!-- 添加数据 -->
+	<insert id="add" parameterType="cn.hl.vo.ClassRoom">
+		insert into classroom 
+		values(default,#{roomName},#{description},#{state})
+	</insert>
+	
+	<!-- 修改数据 -->
+	<update id="edit" parameterType="cn.hl.vo.ClassRoom">
+		update classroom set roomName=#{roomName},description=#{description},
+		state=#{state} where roomId=#{roomId}
+	</update>
+	
+	<!-- 删除数据 -->
+	<delete id="del" parameterType="cn.hl.vo.ClassRoom">
+		delete from classroom where roomId=#{roomId}
+	</delete>
+	
+	<!-- 按照Id查询数据 -->
+	<select id="getById" parameterType="int" resultType="cn.hl.vo.ClassRoom">
+		select * from classroom where roomId=#{id}
+	</select>
+	
+	<!-- 
+		id	：映射的唯一标识符，一般通过Id对映射进行调用
+		resultType	：返回值的类型
+	-->
+	<select id="getAll" resultType="cn.hl.vo.ClassRoom">
+		select * from classroom
+	</select>
+</mapper>

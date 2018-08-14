@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+
+ <mapper namespace="cn.hl.vo.person.mapper">
+ 	<!-- 
+ 		方式一：
+ 		select PersonId,PersonName,CardNo,State from Person a 
+			left join IdCard b on a.cardId=b.cardId where  PersonId=2 		
+ 	-->
+ 	<select id="getById" parameterType="int" resultMap="PersonMap">
+ 		select * from Person a 
+			left join IdCard b on a.cardId=b.cardId where  PersonId=#{id} 
+ 	</select>
+ 	
+ 	<resultMap type="Person" id="PersonMap">
+ 		<id column="personId" property="personId"/>
+ 		<result column="personName" property="personName"/>
+ 		<!-- 联合：
+ 				property	：主表中的外键字段
+ 				javaType 	：property属性字段的类型（自定义类型）
+ 		-->
+ 		<association property="cardId" javaType="IdCard">
+ 			<id column="cardId" property="cardId"/>
+ 			<result column="cardNo" property="cardNo"/>
+ 			<result column="state" property="state"/>
+ 		</association>
+ 	</resultMap>
+ 	
+ 	<!-- 
+ 		方式二：
+ 		Select * from Person where PersonId=2
+		select * from IdCard where CardId=11 
+		
+		select * from IdCard where cardId =(select cardId from Person where PersinId=2)		
+ 	-->
+ 	<!-- 查询Person -->
+ 	<select id="getPerson" parameterType="int" resultMap="PersonMap2">
+ 		Select * from Person where PersonId=#{id}
+ 	</select>
+ 	
+ 	<!-- 查询IdCard -->
+ 	<select id="getIdCard" parameterType="int" resultType="IdCard">
+ 		select * from IdCard where CardId=#{id}
+ 	</select>
+ 	
+ 	<resultMap type="Person" id="PersonMap2">
+ 		<id column="personId" property="personId"/>
+ 		<result column="personName" property="personName"/>
+ 		<!-- 
+ 			建立关联关系：
+ 			select	：需要进行引用的select映射名称
+ 		-->
+ 		<association property="cardId" column="cardId" javaType="IdCard" select="getIdCard">
+ 		</association>
+ 	</resultMap>
+ </mapper>
+  

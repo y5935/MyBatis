@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 环境配置 -->
+	<environments default="development">
+		<!-- 配置数据源的环境，可以有一个或多个 -->
+		<environment id="development">
+			<!-- 
+				配置事物管理方式
+				type：
+					JDBC（推荐） :: 通过JDBC进行事物管理。他依赖于数据源
+				 	MANAGED :: 通过容器来管理事物的声明周期，而容器默认情况下会让他关闭
+			-->
+			<transactionManager type="JDBC"></transactionManager>
+			
+			<!-- 
+				配置数据源
+				type：
+					UNPOOLED :: 不适用连接池，适用于较小的项目。效率稍低
+					POOLED	:: 使用连接池，推荐使用 
+			-->
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://localhost:3306/studentdb"/>
+				<property name="username" value="root"/>
+				<property name="password" value="123"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!-- 引入相关的映射文件 -->
+	<mappers>
+		<!-- 
+			resource ：配置映射文件的位置（使用映射文件的相对物理路径）
+		-->
+		<mapper resource="cn/hl/vo/ClassRoomMapper.xml"/>
+		<mapper resource="cn/hl/vo/UserMapper.xml"/>
+	</mappers>
+</configuration>

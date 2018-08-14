@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 引入数据库配置文件 -->
+	<properties resource="connection.properties"></properties>
+	
+	<!-- 
+		类型别名
+		properties 》》 typeAliases 》》 environments 》》 mappers
+	-->
+	<typeAliases>
+		<!-- 
+			type	：用于设置类型信息
+			alias	：类型所对应的别名
+		-->
+		<typeAlias type="cn.hl.vo.Department" alias="Department"/>
+		<typeAlias type="cn.hl.vo.Person" alias="Person"/>
+		<typeAlias type="cn.hl.vo.Person2" alias="Person2"/>
+		<typeAlias type="cn.hl.vo.IdCard" alias="IdCard"/>
+		<typeAlias type="cn.hl.vo.Account" alias="Account"/>
+	</typeAliases>
+	
+	<!-- 配置数据源环境 -->
+	<environments default="development">
+		<!--
+			环境配置，允许配置多个 
+			id的值必须和外围environments的defualt值相一致 
+		-->
+		<environment id="development">
+			<!-- 
+				配置事务的管理方式
+					jdbc	：使用JDBC的提交和回滚事务。他依赖于数据源得到的连接
+					managed	：通过容器来管理事务。但一般容器不希望关闭连接
+			-->
+			<transactionManager type="jdbc"></transactionManager>
+			<!-- 
+				配置数据源
+				type取值
+					POOLED	：使用连接池方式
+					UNPOOLED：不使用连接池方式
+			-->
+			<dataSource type="POOLED">
+				<!-- 数据库连接的基本配置 -->
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	
+	<!-- 引入（注册）配置文件-->
+	<mappers>
+		<mapper resource="cn/hl/vo/RoleMapper.xml"/>
+		<mapper resource="cn/hl/vo/DepartmentMapper.xml"/>
+		<mapper resource="cn/hl/vo/PersonMapper.xml"/>
+		<mapper resource="cn/hl/vo/Person2Mapper.xml"/>
+	</mappers>
+	
+</configuration>

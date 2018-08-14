@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.hl.vo.Person">
+	<!-- 
+		方式一：按Id执行多表连接查询 
+		select * from Person a join IdCard b on a.cardId=b.cardId
+		where PersonId=2
+	-->
+	<select id="getById" parameterType="int" resultMap="personMap">
+		select * from Person a join IdCard b on a.cardId=b.cardId
+		where PersonId=#{id}
+	</select>
+	
+	<resultMap type="cn.hl.vo.Person" id="personMap">
+		<id column="personId" property="personId"/>
+		<result column="name" property="name"/>
+		<!-- 
+			联合关系
+			property	：属性名，一般为表中外键的名称（同名）
+			javaType	：property属性所对应的Java类的名称 
+		-->
+		<association property="cardId" javaType="cn.hl.vo.IdCard">
+			<id column="cardId" property="cardId"/>
+			<result column="address" property="address"/>
+		</association>
+	</resultMap>
+	
+	<!-- 
+		方式二：独立查询语句进行查询
+		select * from Person where personid=2;
+
+		select * from IdCard where cardId=1002;		
+	-->
+	<select id="getById2" parameterType="int" resultMap="personMap2">
+		select * from Person where personid=#{id}
+	</select>
+	<!-- 查询身份证信息 -->
+	<select id="getIdCard" parameterType="int" resultType="cn.hl.vo.IdCard">
+		select * from IdCard where cardId=#{cardId}
+	</select>
+	
+	<resultMap type="cn.hl.vo.Person" id="personMap2">
+		<id column="personId" property="personId"/>
+		<result column="name" property="name"/>
+		<!-- 
+			property	：实体类中属性的名称
+			column		：表中列的名称
+			javaType	：相关联的的属性的类型（与Property相对应）
+			select		：需要调用的select映射的Id
+		-->
+		<association property="cardId" column="cardId" javaType="cn.hl.vo.IdCard" select="getIdCard">
+		</association>
+	</resultMap>
+</mapper>

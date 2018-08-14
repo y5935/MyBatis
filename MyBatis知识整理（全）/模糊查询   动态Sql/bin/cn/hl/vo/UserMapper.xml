@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.hl.vo.User">
+	<!-- 区间查询：查询所有Id在2~10之间的所有用户信息 -->
+	<select id="testBetween" parameterType="int" resultType="cn.hl.vo.User">
+		select * from users where userId between #{minId} and #{maxId};
+	</select>
+	
+	<!-- Like模糊查询：查询用户表中所有Id在2~10范围内且帐号中包含字母“o”的所有信息 -->
+	<select id="testLike" parameterType="cn.hl.vo.Exp" resultType="cn.hl.vo.User">
+		select * from users 
+		where userId between #{minId} and #{maxId} and account like #{account};
+	</select>
+	
+	<!-- 动态Sql语句：查询用户表中所有Id在2~10范围内且帐号中包含字母“o”的所有信息。如果未传查询的帐号内容，则省略该条件 -->
+	<select id="testIf" parameterType="cn.hl.vo.Exp" resultType="cn.hl.vo.User">
+		select * from users where userId between #{minId} and #{maxId}
+		<!-- if条件 -->
+		<if test="account != null">
+			and account like #{account}
+		</if>
+	</select>
+</mapper>

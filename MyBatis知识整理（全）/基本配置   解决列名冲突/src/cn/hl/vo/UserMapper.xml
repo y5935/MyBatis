@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	namespace	：命名空间，一般使用vo类的全名（报名+类名）
+-->  
+<mapper namespace="cn.hl.vo.User">
+	<select id="getAll" resultType="cn.hl.vo.User">
+		<!-- userId、userName、password与数据表中列名不一致 -->
+		select * from Users
+	</select>
+	
+	<select id="getAll1" resultType="cn.hl.vo.User">
+		<!-- 1、通过查询语句进行解决：使用列别名 -->
+		select userId as id, userName as name,account, pwd as password, age,gender from users
+	</select>
+	
+	
+	<select id="getAll2" resultMap="UserMap">
+		<!-- 2、通过resultMap进行配置 -->
+		select * from users
+	</select>
+	
+	<!-- 
+		配置返回数据的类型
+			type	：查询结果的返回值类型
+			id		：resultMap的Id
+	-->
+	<resultMap type="cn.hl.vo.User" id="UserMap">
+		<!-- 一般用于主键列。column：用于配置表中列的名称；property：用于配置相匹配的对象的属性名 -->
+		<id column="userId" property="id"/>
+		<!-- 一般用于配置非主键列 -->
+		<result  column="userName" property="name"/>
+		<result column="pwd" property="password"/>
+	</resultMap>
+</mapper>
